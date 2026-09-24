@@ -1,45 +1,65 @@
 import Item from "./models/Item.js";
 import Inventory from "./models/Inventory.js";
 import "./constants/items.js";
-import ItemStack from "./models/ItemStack.js";
-import { LLM, TOKEN } from "./constants/ingredients.js";
+import { getNormalizedMousePos } from "./lib/mouse.js";
+import { renderInventory } from "./lib/inventoryUI.js";
+import { renderCraftingRecipes } from "./lib/craftingUI.js";
 
-const INVENTORY = new Inventory([], []);
+declare function confetti(options?: Record<string, unknown>): void;
 
-function seedInventory() {
-    INVENTORY.addItem(new ItemStack(TOKEN, 5));
-    INVENTORY.addItem(new ItemStack(LLM, 5));
-}
+const inventory = new Inventory([], []);
 
-function renderIngredientInventory() {
-    const list = document.getElementById("ingredientInventory");
-    if (!list) return;
+function setupEventListeners() {
+    document.addEventListener("DOMContentLoaded", () => {
+        let timeLeft = 60;
+        const countdownElement = document.getElementById("countdown");
 
-    list.innerHTML = "";
+        if (countdownElement) {
+            countdownElement.textContent = timeLeft.toString();
+        }
 
-    for (const stack of INVENTORY.ingredients) {
-        const li = document.createElement("li");
+        const timerInterval = setInterval(() => {
+            timeLeft--;
 
-        const name = document.createElement("span");
-        name.textContent = stack.item.name;
+            if (countdownElement) {
+                countdownElement.textContent = timeLeft.toString();
+            }
 
-        const count = document.createElement("span");
-        count.textContent = ` (x${stack.count})`;
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
 
-        li.append(name, count);
-        list.append(li);
-    }
-}
+                const button = document.getElementById(
+                    "collectIngredient",
+                ) as HTMLButtonElement;
 
-// Give random ingredient to player when button is clicked
-document
-    .getElementById("collectIngredient")
-    ?.addEventListener("click", function () {
-        const ingredient = Item.getRandomIngredient();
-        INVENTORY.addItem(ingredient.toStack());
-        console.log(INVENTORY);
-        renderIngredientInventory();
+                button.disabled = true;
+                button.style.cursor = "not-allowed";
+                button.style.backgroundColor = "gray";
+            }
+        }, 1000);
     });
 
-seedInventory();
-renderIngredientInventory();
+    document
+        .getElementById("collectIngredient")
+        ?.addEventListener("click", () => {
+            const ingredient = Item.getRandomIngredient();
+            inventory.addOrUpdateStack(ingredient.toStack());
+
+            renderInventory(inventory);
+            renderCraftingRecipes(inventory);
+
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: getNormalizedMousePos(),
+            });
+        });
+
+    document.getElementById("test")?.addEventListener("click", () => {
+        console.log("receipe clicked");
+    });
+}
+
+setupEventListeners();
+renderInventory(inventory);
+renderCraftingRecipes(inventory);

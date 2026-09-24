@@ -1,4 +1,5 @@
 import Inventory from "./Inventory.js";
+import Item from "./Item.js";
 import ItemStack from "./ItemStack.js";
 
 export default class CraftingRecipe {
@@ -8,9 +9,26 @@ export default class CraftingRecipe {
     ) {}
 
     canCraft(inventory: Inventory): boolean {
-        const ingredients = inventory.ingredients;
-        return this.inputs.every(
-            (stack) => (ingredients[stack.item.id]?.count || 0) >= stack.count,
+        return this.inputs.every((input) => {
+            const stack = inventory.ingredients.find(
+                (ingredientStack) => ingredientStack.item === input.item,
+            );
+            return (stack?.count ?? 0) >= input.count;
+        });
+    }
+
+    craft(inventory: Inventory): void {
+        if (!this.canCraft(inventory)) return;
+
+        for (const input of this.inputs) {
+            inventory.removeStack(input);
+        }
+
+        const outputItem = Item.registry.find(
+            (item) => item.id === this.outputItemId,
         );
+        if (outputItem) {
+            inventory.addOrUpdateStack(outputItem.toStack());
+        }
     }
 }

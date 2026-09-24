@@ -1,4 +1,5 @@
 import CraftingRecipe from "./CraftingRecipe.js";
+import Inventory from "./Inventory.js";
 import ItemStack from "./ItemStack.js";
 
 export default class Item {

@@ -11,7 +11,7 @@ export default class Inventory {
         return this.items.some((itemStack) => itemStack.item === item);
     }
 
-    addItem(stack: ItemStack): void {
+    addOrUpdateStack(stack: ItemStack): void {
         const list =
             stack.item.kind === "ingredient" ? this.ingredients : this.items;
         const existingStack = list.find(
@@ -21,6 +21,20 @@ export default class Inventory {
             existingStack.count += stack.count;
         } else {
             list.push(stack);
+        }
+    }
+
+    removeStack(stack: ItemStack): void {
+        const list =
+            stack.item.kind === "ingredient" ? this.ingredients : this.items;
+        const existingStack = list.find(
+            (itemStack) => itemStack.item === stack.item,
+        );
+        if (!existingStack) return;
+
+        existingStack.count -= stack.count;
+        if (existingStack.count <= 0) {
+            list.splice(list.indexOf(existingStack), 1);
         }
     }
 }
