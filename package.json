@@ -3,7 +3,11 @@
     "typescript": "^7.0.2"
   },
   "scripts": {
+    "build:pages": "npm run build && mkdir -p .pages-output && cp index.html style.css .pages-output && cp -r dist .pages-output/dist",
     "build": "tsc",
     "watch": "tsc -w"
+  },
+  "devDependencies": {
+    "wrangler": "^4.140.0"
   }
 }

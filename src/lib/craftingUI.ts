@@ -1,21 +1,17 @@
 import Inventory from "../models/Inventory.js";
 import Item from "../models/Item.js";
-import {
-    renderIngredientInventory,
-    renderCraftedInventory,
-} from "./inventoryUI.js";
+import { renderInventory } from "./inventoryUI.js";
 
 function craft(inventory: Inventory, item: Item) {
     item.recipe?.craft(inventory);
 
-    renderIngredientInventory(inventory);
-    renderCraftedInventory(inventory);
+    renderInventory(inventory);
     renderCraftingRecipes(inventory);
 }
 
 export function renderCraftingRecipes(inventory: Inventory) {
     const table = document.getElementById(
-        "craftingTable",
+        "craftingTable"
     ) as HTMLTableElement | null;
     if (!table) return;
 

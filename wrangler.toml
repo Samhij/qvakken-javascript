@@ -1,0 +1,5 @@
+name = "qvakken-javascript"
+compatibility_date = "2025-09-25"
+
+[assets]
+directory = ".pages-output"
