@@ -1,22 +1,34 @@
 import CraftingRecipe from "./CraftingRecipe.js";
-import Inventory from "./Inventory.js";
 import ItemStack from "./ItemStack.js";
 
 export default class Item {
     public static registry: Item[] = [];
+
+    public id: number;
+    public icon?: string;
     public recipe?: CraftingRecipe;
+    public points?: number;
 
     constructor(
-        public id: number,
         public name: string,
-        public icon: string,
         public kind: "ingredient" | "item",
     ) {
+        this.id = Item.registry.length;
         Item.registry.push(this);
     }
 
-    setRecipe(recipe: CraftingRecipe): this {
-        this.recipe = recipe;
+    setRecipe(inputs: ItemStack[]): this {
+        this.recipe = new CraftingRecipe(inputs, this.id);
+        return this;
+    }
+
+    setIcon(icon: string): this {
+        this.icon = icon;
+        return this;
+    }
+
+    setPoints(points: number): this {
+        this.points = points;
         return this;
     }
 

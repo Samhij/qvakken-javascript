@@ -1,6 +1,6 @@
 import Item from "./models/Item.js";
 import Inventory from "./models/Inventory.js";
-import "./constants/Items.js";
+import "./registry/Items.js";
 import { getNormalizedMousePos } from "./lib/mouse.js";
 import { renderInventory } from "./lib/inventoryUI.js";
 import { renderCraftingRecipes } from "./lib/craftingUI.js";
@@ -29,7 +29,7 @@ function setupEventListeners() {
                 clearInterval(timerInterval);
 
                 const button = document.getElementById(
-                    "collectIngredient"
+                    "collectIngredient",
                 ) as HTMLButtonElement;
 
                 button.disabled = true;
@@ -43,7 +43,7 @@ function setupEventListeners() {
         confetti({
             particleCount: 100,
             spread: 70,
-            origin: getNormalizedMousePos()
+            origin: getNormalizedMousePos(),
         });
     });
 

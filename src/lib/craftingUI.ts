@@ -4,14 +4,13 @@ import { renderInventory } from "./inventoryUI.js";
 
 function craft(inventory: Inventory, item: Item) {
     item.recipe?.craft(inventory);
-
     renderInventory(inventory);
     renderCraftingRecipes(inventory);
 }
 
 export function renderCraftingRecipes(inventory: Inventory) {
     const table = document.getElementById(
-        "craftingTable"
+        "craftingTable",
     ) as HTMLTableElement | null;
     if (!table) return;
 
@@ -25,12 +24,20 @@ export function renderCraftingRecipes(inventory: Inventory) {
     const thResultaat = document.createElement("th");
     thResultaat.textContent = "Resultaat";
 
-    header.append(thRecept, thResultaat);
+    const thPunten = document.createElement("th");
+    thPunten.textContent = "Punten";
 
-    // One row per craftable item
-    for (const item of Item.registry) {
-        if (!item.recipe) continue;
+    header.append(thRecept, thResultaat, thPunten);
 
+    // One row per craftable item, sorted by points ascending
+    const craftableItems = Item.registry
+        .filter(
+            (item): item is Item & { recipe: NonNullable<Item["recipe"]> } =>
+                item.recipe !== undefined,
+        )
+        .sort((a, b) => (a.points ?? 0) - (b.points ?? 0));
+
+    for (const item of craftableItems) {
         const tr = table.insertRow();
         const recipeCell = tr.insertCell();
         recipeCell.textContent = item.recipe.inputs
@@ -39,6 +46,9 @@ export function renderCraftingRecipes(inventory: Inventory) {
 
         const resultCell = tr.insertCell();
         resultCell.textContent = item.name;
+
+        const pointsCell = tr.insertCell();
+        pointsCell.textContent = item.points?.toString() ?? "";
 
         if (item.recipe.canCraft(inventory)) {
             tr.addEventListener("click", () => craft(inventory, item));
