@@ -24,7 +24,10 @@ function renderAll() {
         inventory,
         showGlitchTarget ? glitchTargetIndex : undefined,
     );
-    renderCraftingRecipes(inventory);
+    renderCraftingRecipes(
+        inventory,
+        showGlitchTarget ? glitchTargetIndex : undefined,
+    );
 
     const pointsSpan = document.getElementById("points") as HTMLSpanElement;
     pointsSpan.textContent = inventory.getTotalPoints().toString();
@@ -48,6 +51,7 @@ function setupEventListeners() {
 
             if (timeLeft <= 0) {
                 clearInterval(timerInterval);
+                clearInterval(glitchInterval);
 
                 const button = document.getElementById(
                     "collectIngredient",
@@ -67,22 +71,19 @@ function setupEventListeners() {
         }, 1000);
     });
 
-    document.addEventListener("click", () => {
-        confetti({
-            particleCount: 100,
-            spread: 70,
-            origin: getNormalizedMousePos(),
-        });
-    });
-
     document
         .getElementById("collectIngredient")
         ?.addEventListener("click", () => {
             const ingredient = Item.getRandomIngredient();
             inventory.addOrUpdateStack(ingredient.toStack());
 
-            renderInventory(inventory);
-            renderCraftingRecipes(inventory);
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: getNormalizedMousePos(),
+            });
+
+            renderAll();
         });
 
     document.getElementById("test")?.addEventListener("click", () => {
@@ -95,7 +96,7 @@ function setupEventListeners() {
         glitchCountdownElement.textContent = glitchTimeLeft.toString();
     }
 
-    setInterval(() => {
+    const glitchInterval = setInterval(() => {
         glitchTimeLeft--;
 
         if (glitchTimeLeft <= 0) {

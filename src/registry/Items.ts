@@ -6,7 +6,7 @@ function createItem(name: string, points: number): Item {
     return new Item(name, "item").setPoints(points);
 }
 
-export default class Items {
+export default abstract class Items {
     public static ICE_BREAKER = createItem("ICE-breker", 15).setRecipe([
         new ItemStack(Ingredients.FIREWALL_SHARD, 3),
         Ingredients.ICE_ESSENCE.toStack(),

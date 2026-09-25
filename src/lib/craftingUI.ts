@@ -2,16 +2,23 @@ import Inventory from "../models/Inventory.js";
 import Item from "../models/Item.js";
 import { renderInventory } from "./inventoryUI.js";
 
-function craft(inventory: Inventory, item: Item) {
+function craft(
+    inventory: Inventory,
+    item: Item,
+    glitchHighlightIndex?: number,
+) {
     item.recipe?.craft(inventory);
-    renderInventory(inventory);
-    renderCraftingRecipes(inventory);
+    renderInventory(inventory, glitchHighlightIndex);
+    renderCraftingRecipes(inventory, glitchHighlightIndex);
 
     const pointsSpan = document.getElementById("points") as HTMLSpanElement;
     pointsSpan.textContent = inventory.getTotalPoints().toString();
 }
 
-export function renderCraftingRecipes(inventory: Inventory) {
+export function renderCraftingRecipes(
+    inventory: Inventory,
+    glitchHighlightIndex?: number,
+) {
     const table = document.getElementById(
         "craftingTable",
     ) as HTMLTableElement | null;
@@ -54,7 +61,9 @@ export function renderCraftingRecipes(inventory: Inventory) {
         pointsCell.textContent = item.points?.toString() ?? "";
 
         if (item.recipe.canCraft(inventory)) {
-            tr.addEventListener("click", () => craft(inventory, item));
+            tr.addEventListener("click", () =>
+                craft(inventory, item, glitchHighlightIndex),
+            );
             tr.style.color = "white";
         } else {
             tr.style.cursor = "not-allowed";

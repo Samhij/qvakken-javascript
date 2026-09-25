@@ -4,7 +4,7 @@ function createIngredient(name: string): Item {
     return new Item(name, "ingredient");
 }
 
-export default class Ingredients {
+export default abstract class Ingredients {
     public static DATA_FRAGMENT = createIngredient("Datafragment");
     public static NEON_CORE = createIngredient("Neonkern");
     public static FIREWALL_SHARD = createIngredient("Firewall-scherf");
