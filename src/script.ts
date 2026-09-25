@@ -1,6 +1,6 @@
 import Item from "./models/Item.js";
 import Inventory from "./models/Inventory.js";
-import "./constants/items.js";
+import "./constants/Items.js";
 import { getNormalizedMousePos } from "./lib/mouse.js";
 import { renderInventory } from "./lib/inventoryUI.js";
 import { renderCraftingRecipes } from "./lib/craftingUI.js";
@@ -29,7 +29,7 @@ function setupEventListeners() {
                 clearInterval(timerInterval);
 
                 const button = document.getElementById(
-                    "collectIngredient",
+                    "collectIngredient"
                 ) as HTMLButtonElement;
 
                 button.disabled = true;
@@ -37,6 +37,14 @@ function setupEventListeners() {
                 button.style.backgroundColor = "gray";
             }
         }, 1000);
+    });
+
+    document.addEventListener("click", () => {
+        confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: getNormalizedMousePos()
+        });
     });
 
     document
@@ -47,12 +55,6 @@ function setupEventListeners() {
 
             renderInventory(inventory);
             renderCraftingRecipes(inventory);
-
-            confetti({
-                particleCount: 100,
-                spread: 70,
-                origin: getNormalizedMousePos(),
-            });
         });
 
     document.getElementById("test")?.addEventListener("click", () => {
