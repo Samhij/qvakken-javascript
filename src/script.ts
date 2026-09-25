@@ -35,6 +35,13 @@ function setupEventListeners() {
                 button.disabled = true;
                 button.style.cursor = "not-allowed";
                 button.style.backgroundColor = "gray";
+
+                const craftingContainer =
+                    document.getElementById("craftingContainer");
+                if (craftingContainer) {
+                    craftingContainer.style.pointerEvents = "none";
+                    craftingContainer.style.opacity = "0.5";
+                }
             }
         }, 1000);
     });
@@ -60,6 +67,9 @@ function setupEventListeners() {
     document.getElementById("test")?.addEventListener("click", () => {
         console.log("receipe clicked");
     });
+
+    const pointsSpan = document.getElementById("points") as HTMLSpanElement;
+    pointsSpan.textContent = inventory.getTotalPoints().toString();
 }
 
 setupEventListeners();

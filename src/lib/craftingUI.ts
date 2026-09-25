@@ -6,6 +6,9 @@ function craft(inventory: Inventory, item: Item) {
     item.recipe?.craft(inventory);
     renderInventory(inventory);
     renderCraftingRecipes(inventory);
+
+    const pointsSpan = document.getElementById("points") as HTMLSpanElement;
+    pointsSpan.textContent = inventory.getTotalPoints().toString();
 }
 
 export function renderCraftingRecipes(inventory: Inventory) {

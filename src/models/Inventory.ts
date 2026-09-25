@@ -11,6 +11,15 @@ export default class Inventory {
         return this.items.some((itemStack) => itemStack.item === item);
     }
 
+    getTotalPoints(): number {
+        if (this.items.length === 0) return 0;
+
+        return this.items.reduce(
+            (total, stack) => total + (stack.item.points ?? 0) * stack.count,
+            0,
+        );
+    }
+
     addOrUpdateStack(stack: ItemStack): void {
         const list =
             stack.item.kind === "ingredient" ? this.ingredients : this.items;
