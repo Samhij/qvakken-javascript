@@ -1,13 +1,34 @@
-import Item from "./models/Item.js";
-import Inventory from "./models/Inventory.js";
-import "./registry/Items.js";
-import { getNormalizedMousePos } from "./lib/mouse.js";
-import { renderInventory } from "./lib/inventoryUI.js";
 import { renderCraftingRecipes } from "./lib/craftingUI.js";
+import { renderInventory } from "./lib/inventoryUI.js";
+import { getNormalizedMousePos } from "./lib/mouse.js";
+import Inventory from "./models/Inventory.js";
+import Item from "./models/Item.js";
+import "./registry/Items.js";
 
 declare function confetti(options?: Record<string, unknown>): void;
 
 const inventory = new Inventory([], []);
+
+let glitchTimeLeft = 10;
+let glitchTargetIndex = -1;
+let showGlitchTarget = false;
+
+function getRandomGlitchIndex(): number {
+    return inventory.ingredients.length > 0
+        ? Math.floor(Math.random() * inventory.ingredients.length)
+        : -1;
+}
+
+function renderAll() {
+    renderInventory(
+        inventory,
+        showGlitchTarget ? glitchTargetIndex : undefined,
+    );
+    renderCraftingRecipes(inventory);
+
+    const pointsSpan = document.getElementById("points") as HTMLSpanElement;
+    pointsSpan.textContent = inventory.getTotalPoints().toString();
+}
 
 function setupEventListeners() {
     document.addEventListener("DOMContentLoaded", () => {
@@ -68,10 +89,35 @@ function setupEventListeners() {
         console.log("receipe clicked");
     });
 
-    const pointsSpan = document.getElementById("points") as HTMLSpanElement;
-    pointsSpan.textContent = inventory.getTotalPoints().toString();
+    const glitchCountdownElement = document.getElementById("glitchCountdown");
+
+    if (glitchCountdownElement) {
+        glitchCountdownElement.textContent = glitchTimeLeft.toString();
+    }
+
+    setInterval(() => {
+        glitchTimeLeft--;
+
+        if (glitchTimeLeft <= 0) {
+            // The glitch fires: remove the doomed ingredient and start a new cycle
+            if (glitchTargetIndex >= 0) {
+                inventory.ingredients.splice(glitchTargetIndex, 1);
+            }
+            showGlitchTarget = false;
+            glitchTimeLeft = 10;
+        } else if (glitchTimeLeft === 5) {
+            // Warn the player which ingredient is about to disappear
+            glitchTargetIndex = getRandomGlitchIndex();
+            showGlitchTarget = true;
+        }
+
+        renderAll();
+
+        if (glitchCountdownElement) {
+            glitchCountdownElement.textContent = glitchTimeLeft.toString();
+        }
+    }, 1000);
 }
 
 setupEventListeners();
-renderInventory(inventory);
-renderCraftingRecipes(inventory);
+renderAll();

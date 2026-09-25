@@ -114,8 +114,3 @@ tr {
 tr:hover td {
     background: var(--background-color-box);
 }
-
-#countdownContainer {
-    font-weight: bold;
-    font-size: larger;
-}
