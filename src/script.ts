@@ -22,11 +22,11 @@ function getRandomGlitchIndex(): number {
 function renderAll() {
     renderInventory(
         inventory,
-        showGlitchTarget ? glitchTargetIndex : undefined,
+        showGlitchTarget ? glitchTargetIndex : undefined
     );
     renderCraftingRecipes(
         inventory,
-        showGlitchTarget ? glitchTargetIndex : undefined,
+        showGlitchTarget ? glitchTargetIndex : undefined
     );
 
     const pointsSpan = document.getElementById("points") as HTMLSpanElement;
@@ -34,6 +34,15 @@ function renderAll() {
 }
 
 function setupEventListeners() {
+    document.addEventListener("click", function(evt) {
+        if (!evt.isTrusted) {
+            evt.preventDefault();
+            evt.stopImmediatePropagation();
+            console.log("Block automated click");
+            return;
+        }
+    }, true);
+
     document.addEventListener("DOMContentLoaded", () => {
         let timeLeft = 60;
         const countdownElement = document.getElementById("countdown");
@@ -54,7 +63,7 @@ function setupEventListeners() {
                 clearInterval(glitchInterval);
 
                 const button = document.getElementById(
-                    "collectIngredient",
+                    "collectIngredient"
                 ) as HTMLButtonElement;
 
                 button.disabled = true;
@@ -80,7 +89,7 @@ function setupEventListeners() {
             confetti({
                 particleCount: 100,
                 spread: 70,
-                origin: getNormalizedMousePos(),
+                origin: getNormalizedMousePos()
             });
 
             renderAll();
