@@ -1,54 +1,83 @@
 <!doctype html>
 <html lang="en" style="background-color: #121212">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="theme-color" content="#121212" />
-        <title>De Glitchy Alchemist</title>
-        <link rel="stylesheet" href="style.css" />
-    </head>
-    <body>
-        <div class="row">
-            <div class="container" id="countdownContainer">
-                Nog
-                <span id="countdown"> <!-- Filled by JavaScript --> </span> seconden
-                over
-            </div>
-            <div class="container">
-                <span id="points"></span> punten
-            </div>
-            <div class="container">
-                Volgende glitch over
-                <span id="glitchCountdown">10</span> seconden
-            </div>
-        </div>
+<head>
+    <meta charset="UTF-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="#121212" name="theme-color" />
+    <title>De Glitchy Alchemist</title>
+    <link href="style.css" rel="stylesheet" />
+</head>
+<body>
+<div class="row">
+    <div class="container" id="countdownContainer">
+        Nog
+        <span id="countdown"> <!-- Filled by JavaScript --> </span> seconden
+        over
+    </div>
+    <div class="container">
+        <span id="points"></span> punten
+    </div>
+    <div class="container">
+        Volgende glitch over
+        <span id="glitchCountdown">10</span> seconden
+    </div>
+</div>
 
-        <div class="container">
-            <button id="collectIngredient">Verzamel Ingredi&euml;nt</button>
-        </div>
+<div class="container">
+    <button id="collectIngredient">Verzamel Ingredi&euml;nt</button>
+</div>
 
-        <div class="row">
-            <div class="container" id="inventoryContainer">
-                <h2>Inventaris</h2>
-                <h3>Ingredi&euml;nten</h3>
-                <ul id="ingredientInventory">
-                    <!-- Filled by JavaScript -->
-                </ul>
-                <h3>Gemaakte items</h3>
-                <ul id="craftedInventory">
-                    <!-- Filled by JavaScript -->
-                </ul>
-            </div>
+<div class="row">
+    <div class="container" id="inventoryContainer">
+        <h2>Inventaris</h2>
+        <h3>Ingredi&euml;nten</h3>
+        <ul id="ingredientInventory">
+            <!-- Filled by JavaScript -->
+        </ul>
+        <h3>Gemaakte items</h3>
+        <ul id="craftedInventory">
+            <!-- Filled by JavaScript -->
+        </ul>
+    </div>
 
-            <div class="container" id="craftingContainer">
-                <h2>Crafting</h2>
-                <table id="craftingTable">
-                    <!-- Filled by JavaScript -->
-                </table>
-            </div>
-        </div>
+    <div class="container" id="craftingContainer">
+        <h2>Crafting</h2>
+        <table id="craftingTable">
+            <!-- Filled by JavaScript -->
+        </table>
+    </div>
+</div>
 
-        <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
-        <script type="module" src="dist/script.js"></script>
-    </body>
+<dialog id="gameOverModal">
+    <div id="submitView">
+        <h2>Tijd is op!</h2>
+        <p>Je hebt <span id="finalPoints"></span> punten behaald.</p>
+        <label>
+            Naam
+            <input id="playerName" maxlength="32" required type="text" />
+        </label>
+        <button id="submitScore">Verstuur score</button>
+    </div>
+
+    <div hidden id="leaderboardView">
+        <h2>Leaderboard</h2>
+        <table id="leaderboardTable">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Naam</th>
+                <th>Score</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Filled by JavaScript -->
+            </tbody>
+        </table>
+        <p>Refresh the pagina om opnieuw te spelen.</p>
+    </div>
+</dialog>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+<script src="dist/script.js" type="module"></script>
+</body>
 </html>

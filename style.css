@@ -43,6 +43,25 @@ body {
     flex: 1 1 0;
 }
 
+#gameOverModal {
+    border: none;
+    border-radius: 10px;
+    padding: 32px;
+    background: var(--background-color-card);
+    color: white;
+    text-align: center;
+}
+
+#gameOverModal::backdrop {
+    background: rgba(0, 0, 0, 0.7);
+}
+
+#gameOverModal button {
+    margin-top: 20px;
+    font-size: 1.2rem;
+    padding: 10px;
+}
+
 input {
     padding: 10px;
     font-size: 16px;

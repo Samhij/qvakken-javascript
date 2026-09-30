@@ -44,7 +44,7 @@ function setupEventListeners() {
     }, true);
 
     document.addEventListener("DOMContentLoaded", () => {
-        let timeLeft = 60;
+        let timeLeft = 1;
         const countdownElement = document.getElementById("countdown");
 
         if (countdownElement) {
@@ -76,6 +76,13 @@ function setupEventListeners() {
                     craftingContainer.style.pointerEvents = "none";
                     craftingContainer.style.opacity = "0.5";
                 }
+
+                const modal = document.getElementById("gameOverModal") as HTMLDialogElement;
+                const finalPoints = document.getElementById("finalPoints");
+                if (finalPoints) {
+                    finalPoints.textContent = inventory.getTotalPoints().toString();
+                }
+                modal?.showModal();
             }
         }, 1000);
     });
@@ -95,8 +102,57 @@ function setupEventListeners() {
             renderAll();
         });
 
-    document.getElementById("test")?.addEventListener("click", () => {
-        console.log("receipe clicked");
+    document.getElementById("submitScore")?.addEventListener("click", async () => {
+        const nameInput = document.getElementById("playerName") as HTMLInputElement;
+        const name = nameInput.value.trim();
+        const score = inventory.getTotalPoints();
+
+        if (!name) {
+            nameInput.focus();
+            return;
+        }
+
+        const button = document.getElementById("submitScore") as HTMLButtonElement;
+        button.disabled = true;
+
+        try {
+            const response = await fetch("https://api.hijmanssam.dev/qvakken-javascript/leaderboard",
+                {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ name, score })
+                });
+
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+
+            const leaderboardRes = await fetch("https://api.hijmanssam.dev/qvakken-javascript/leaderboard");
+            if (!leaderboardRes.ok) {
+                throw new Error(`HTTP ${leaderboardRes.status}`);
+            }
+
+            const entries = (await leaderboardRes.json()) as {
+                name: string;
+                score: number;
+            }[];
+
+            const tbody = document.querySelector("#leaderboardTable tbody");
+            if (tbody) {
+                tbody.innerHTML = "";
+                for (const [i, entry] of entries.slice(0, 10).entries()) {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `<td>${i + 1}</td><td>${entry.name}</td><td>${entry.score}</td>`;
+                    tbody.append(row);
+                }
+            }
+
+            document.getElementById("submitView")!.hidden = true;
+            document.getElementById("leaderboardView")!.hidden = false;
+        } catch (err) {
+            console.error("Failed to submit score:", err);
+            button.disabled = false;
+        }
     });
 
     const glitchCountdownElement = document.getElementById("glitchCountdown");
