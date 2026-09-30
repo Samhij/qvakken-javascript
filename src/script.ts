@@ -44,7 +44,7 @@ function setupEventListeners() {
     }, true);
 
     document.addEventListener("DOMContentLoaded", () => {
-        let timeLeft = 1;
+        let timeLeft = 60;
         const countdownElement = document.getElementById("countdown");
 
         if (countdownElement) {
