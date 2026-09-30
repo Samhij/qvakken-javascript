@@ -34,15 +34,6 @@ function renderAll() {
 }
 
 function setupEventListeners() {
-    document.addEventListener("click", function(evt) {
-        if (!evt.isTrusted) {
-            evt.preventDefault();
-            evt.stopImmediatePropagation();
-            console.log("Block automated click");
-            return;
-        }
-    }, true);
-
     document.addEventListener("DOMContentLoaded", () => {
         let timeLeft = 60;
         const countdownElement = document.getElementById("countdown");
