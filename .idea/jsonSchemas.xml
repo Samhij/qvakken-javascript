@@ -14,6 +14,9 @@
                   <Item>
                     <option name="path" value="wrangler.toml" />
                   </Item>
+                  <Item>
+                    <option name="path" value="wrangler.jsonc" />
+                  </Item>
                 </list>
               </option>
             </SchemaInfo>
